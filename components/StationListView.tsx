@@ -5,10 +5,10 @@ import { Station } from '@/components/download/stationService';
 
 interface StationListProps {
     stations: Station[]; // Explicitly declare that stations is an array of Station
-    loadMoreStations: () => void; // Function to load more stations
+
 }
 
-const StationList: React.FC<StationListProps> = ({ stations, loadMoreStations }) => {
+const StationListView: React.FC<StationListProps> = ({ stations }) => {
     return (
         <View style={styles.container}>
             <FlashList
@@ -20,8 +20,6 @@ const StationList: React.FC<StationListProps> = ({ stations, loadMoreStations })
                     </View>
                 )}
                 estimatedItemSize={100} // Improve FlashList performance
-                onEndReached={loadMoreStations} // Load more when reaching the end
-                onEndReachedThreshold={0.5} // Trigger when 50% of the way through the last item
             />
         </View>
     );
@@ -59,4 +57,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default StationList;
+export default StationListView;

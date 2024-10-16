@@ -1,15 +1,46 @@
 import { StyleSheet, ActivityIndicator } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { View, Button, Modal, Text } from 'react-native';
 import { fetchStations, addStation, Station } from '@/components/download/stationService';
-import StationList from '@/components/StationList';
+import { StationsContext } from '@/components/download/StationsContext';
+import StationListView from '@/components/StationListView';
 import AddStationModal from '@/components/AddStationModal';
 
 const HomeScreen: React.FC = () => {
+    const stationsContext = useContext(StationsContext);
+    if (!stationsContext) {
+        return <Text>Error: StationsContext is not available</Text>;
+    }
+
+    const { stations, loading, error, setStations } = stationsContext;
+    const [modalVisible, setModalVisible] = useState<boolean>(false); // For modal visibility
+
+    // Function to handle adding a new station
+    const handleAddStation = (newStation: Station) => {
+        // Update the stations by appending the new station
+        setStations((prevStations: Station[]) => [...prevStations, newStation]);
+        setModalVisible(false); // Close modal after adding
+    };
+
+
+    if (loading) {
+        return (
+            <View style={styles.loading}>
+                <ActivityIndicator size="large" color="#0000ff" />
+            </View>
+        );
+    }
+
+    if (error) {
+        return <Text>Error loading stations: {error}</Text>;
+    }
+
+
     /*const [stations, setStations] = useState<Station[]>([]);
     const [loading, setLoading] = useState<boolean>(true); // Added loading state
     const [modalVisible, setModalVisible] = useState<boolean>(false);*/
-    const [stations, setStations] = useState<Station[]>([]);
+
+    /*const [stations, setStations] = useState<Station[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [loadingMore, setLoadingMore] = useState<boolean>(false); // Loading state for pagination
     const [modalVisible, setModalVisible] = useState<boolean>(false);
@@ -48,7 +79,7 @@ const HomeScreen: React.FC = () => {
             setStations(data);
             setLoading(false); // Stop loading after data is fetched
         };*/
-        loadStations();
+        /*loadStations();
     }, []);
 
     // Function to load more stations when user scrolls to the end
@@ -72,18 +103,33 @@ const HomeScreen: React.FC = () => {
                 <ActivityIndicator size="large" color="#0000ff" />
             </View>
         );
-    }
+    }*/
 
     // Render the HomeScreen content
     return (
-        <View style={styles.container}>
-            {/* StationList renders the FlashList */}
-            <StationList stations={stations} loadMoreStations={loadMoreStations}/>
+        /*<View style={styles.container}>
+            {/* StationListView renders the FlashList }
+            <StationListView stations={stations} loadMoreStations={loadMoreStations}/>
 
-            {/* Button to trigger modal for adding new station */}
+            {/* Button to trigger modal for adding new station }
             <Button title="Add Station" onPress={() => setModalVisible(true)} />
 
-            {/* Modal for adding a station */}
+            {/* Modal for adding a station }
+            <Modal
+                visible={modalVisible}
+                onRequestClose={() => setModalVisible(false)}
+            >
+                <AddStationModal
+                    visible={modalVisible}
+                    onClose={() => setModalVisible(false)}
+                    onSave={handleAddStation}
+                />
+            </Modal>
+        </View>*/
+        <View style={styles.container}>
+            <StationListView stations={stations} />
+            <Button title="Add Station" onPress={() => setModalVisible(true)} />
+
             <Modal
                 visible={modalVisible}
                 onRequestClose={() => setModalVisible(false)}

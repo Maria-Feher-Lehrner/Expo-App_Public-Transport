@@ -18,7 +18,7 @@ let stationData: Station[] = [];
  * Fetch stations from the CSV file, parse it, and store it in memory.
  * @returns Promise that resolves to the parsed station data array
  */
-export const fetchStations = async (startIndex: number = 0, limit: number = 50): Promise<Station[]> => {
+export const fetchStations = async (): Promise<Station[]> => {
     try {
         // Fetch the CSV file
         const startTime = Date.now(); // Start timer
@@ -37,25 +37,14 @@ export const fetchStations = async (startIndex: number = 0, limit: number = 50):
         });
 
         // Map the parsed data to Station objects and store them
-        /*stationData = results.data.map((row: any) => ({
+        stationData = results.data.map((row: any) => ({
             station_id: row['HALTESTELLEN_ID'],
             station_name: row['NAME'],
             latitude: row['WGS84_LAT'],   // These keys should match the actual CSV headers
             longitude: row['WGS84_LON'],
         }));
+        return stationData;
 
-        return stationData;*/
-
-        const paginatedData = results.data
-            .slice(startIndex, startIndex + limit)  // Return only the required slice
-            .map((row: any) => ({
-                station_id: row['HALTESTELLEN_ID'],
-                station_name: row['NAME'],
-                latitude: row['WGS84_LAT'],
-                longitude: row['WGS84_LON'],
-            }));
-
-        return paginatedData;
     } catch (error) {
         console.error('Error fetching or parsing CSV:', error);
         return [];

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, View, TextInput, Text, Button, StyleSheet } from 'react-native';
+import { View, TextInput, Text, Button, StyleSheet } from 'react-native';
 import * as Location from 'expo-location';
 import { Station } from '@/components/download/stationService';
 
@@ -13,6 +13,26 @@ const AddStationFormView: React.FC<AddStationFormViewProps> = ({ onClose, onSave
     const [latitude, setLatitude] = useState('');
     const [longitude, setLongitude] = useState('');
 
+    const getCurrentLocation = async () => {
+        try {
+            const { status } = await Location.requestForegroundPermissionsAsync();
+            if (status === 'granted') {
+                const location = await Location.getCurrentPositionAsync({});
+                const { latitude, longitude } = location.coords;
+                setLatitude(latitude.toString());
+                setLongitude(longitude.toString());
+            } else {
+                console.log('Location permission not granted');
+            }
+        } catch (error) {
+            console.error('Error fetching location', error);
+        }
+    };
+
+    // Use effect to fetch location when component mounts
+    useEffect(() => {
+        getCurrentLocation();
+    }, []);
 
     const handleSave = () => {
         if (stationName && latitude && longitude) {
@@ -23,13 +43,6 @@ const AddStationFormView: React.FC<AddStationFormViewProps> = ({ onClose, onSave
         }
     };
 
-    // Function to generate a random station_id outside the existing range
-    const generateStationId = (): string => {
-        const minId = 1;
-        const maxId = 1355434120;
-        const randomId = Math.floor(Math.random() * (maxId - minId + 1)) + minId;
-        return randomId.toString();
-    };
 
 /*
     // Function to get the current location
@@ -82,30 +95,34 @@ const AddStationFormView: React.FC<AddStationFormViewProps> = ({ onClose, onSave
 
 
             <View style={styles.container}>
+                <Text style={styles.text}>Add a new station here!</Text>
+
+                <Text style={styles.label}>Station Name</Text>
                 <TextInput
-                    placeholder="Station Name"
                     value={stationName}
                     onChangeText={setStationName}
-                    style={{ marginBottom: 10, borderWidth: 1, padding: 10, width: '100%' }}
+                    style={styles.input}
                 />
+                <Text style={styles.label}>Latitude</Text>
                 <TextInput
-                    placeholder="Latitude"
                     value={latitude}
                     onChangeText={setLatitude}
-                    style={{ marginBottom: 10, borderWidth: 1, padding: 10, width: '100%' }}
+                    style={styles.input}
                     keyboardType="numeric" // Ensures that the user can enter numeric values only
                 />
+                <Text style={styles.label}>Longitude</Text>
                 <TextInput
-                    placeholder="Longitude"
                     value={longitude}
                     onChangeText={setLongitude}
-                    style={{ marginBottom: 10, borderWidth: 1, padding: 10, width: '100%' }}
+                    style={styles.input}
                     keyboardType="numeric" // Ensures that the user can enter numeric values only
                 />
-                <Button title="Add Station" onPress={handleSave} />
-                <Button title="Cancel" onPress={onClose} />
 
-                <Text style={styles.text}>Add a new station here!</Text>
+                <View style={styles.buttonContainer}>
+                    <Button title="Add Station" onPress={handleSave} />
+                    <View style={styles.buttonSpacing} />
+                    <Button title="Cancel" onPress={onClose} />
+                </View>
 
             </View>
 
@@ -123,10 +140,29 @@ const styles = StyleSheet.create({
         fontSize: 20,
         marginBottom: 20,
     },
-    button: {
-        padding: 2,
-        margin: 2
-    }
+    label: {
+        fontSize: 16,
+        marginVertical: 5,
+        marginStart: 20,
+        alignSelf: 'flex-start', // Align labels to the start
+    },
+    input: {
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 8,
+        padding: 10,
+        marginBottom: 10,
+        width: '90%', // Set width to 90% of parent container
+    },
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 20,
+        width: '90%', // Set width to 90% of parent container
+    },
+    buttonSpacing: {
+        width: 10, // Space between buttons
+    },
 });
 
 export default AddStationFormView;

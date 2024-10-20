@@ -6,7 +6,7 @@ import { Station } from '@/components/download/stationService';
 interface AddStationModalProps {
     visible: boolean;
     onClose: () => void;
-    onSave: (newStation: Station) => void; // Add onSave prop
+    onSave: (newStation: Station) => void;
 }
 
 const AddStationModal: React.FC<AddStationModalProps> = ({ visible, onClose, onSave }) => {

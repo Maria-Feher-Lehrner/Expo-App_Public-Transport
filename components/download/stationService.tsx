@@ -1,4 +1,3 @@
-import * as FileSystem from 'expo-file-system';
 import Papa from 'papaparse';
 
 // Define the interface for the station data structure
@@ -33,14 +32,14 @@ export const fetchStations = async (): Promise<Station[]> => {
         // Parse the CSV data using PapaParse
         const results = Papa.parse(csvString, {
             header: true, // Treat the first row as headers
-            delimiter: ';', // Use semicolon as the delimiter
+            delimiter: ';',
         });
 
         // Map the parsed data to Station objects and store them
         stationData = results.data.map((row: any) => ({
             station_id: row['HALTESTELLEN_ID'],
             station_name: row['NAME'],
-            latitude: row['WGS84_LAT'],   // These keys should match the actual CSV headers
+            latitude: row['WGS84_LAT'],
             longitude: row['WGS84_LON'],
         }));
         return stationData;

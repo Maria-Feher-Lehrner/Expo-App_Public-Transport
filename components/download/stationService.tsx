@@ -41,7 +41,13 @@ export const fetchStations = async (): Promise<Station[]> => {
             station_name: row['NAME'],
             latitude: row['WGS84_LAT'],
             longitude: row['WGS84_LON'],
-        }));
+        }))
+            .filter((station: Station) => {
+                const lat = parseFloat(station.latitude);
+                const long = parseFloat(station.longitude);
+                // Filter out invalid latitude and longitude
+                return !isNaN(lat) && lat >= -90 && lat <= 90 && !isNaN(long) && long >= -180 && long <= 180;
+            });
         return stationData;
 
     } catch (error) {

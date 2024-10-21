@@ -3,7 +3,6 @@ import {StyleSheet, View, Text} from 'react-native';
 import React, {useEffect, useState, useContext} from 'react';
 import MapView, {Marker} from 'react-native-maps';
 import * as Location from 'expo-location';
-import {Station, getStations} from '@/components/download/stationService';
 import {StationsContext} from "@/components/download/StationsContext";
 
 interface LocationCoordinates {
@@ -101,7 +100,7 @@ const MapScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-    // Add any additional styles you want here
+    // Potential for additional styles here
 });
 
 export default MapScreen;

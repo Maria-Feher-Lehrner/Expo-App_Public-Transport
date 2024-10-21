@@ -18,7 +18,7 @@ const StationsProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     useEffect(() => {
         const loadStations = async () => {
             try {
-                const data = await fetchStations(); // Load all stations at once (adjust the limit if needed)
+                const data = await fetchStations();
                 setStations(data);
             } catch (err) {
                 setError('Failed to fetch stations');

@@ -1,5 +1,5 @@
 import {View, Button, Modal, Text, StyleSheet, ActivityIndicator} from 'react-native';
-import React, {useEffect, useState, useContext} from 'react';
+import React, {useState, useContext} from 'react';
 import {Station} from '@/components/download/stationService';
 import {StationsContext} from '@/components/download/StationsContext';
 import StationListView from '@/components/StationListView';
@@ -27,7 +27,6 @@ const HomeScreen: React.FC = () => {
         return <Text>Error loading stations: {error}</Text>;
     }
 
-    // Function to handle adding a new station
     const handleAddStation = (stationName: string, latitude: string, longitude: string) => {
         const newStation: Station = {
             station_id: Math.random().toString(),  // Generate a random ID for now
@@ -38,9 +37,9 @@ const HomeScreen: React.FC = () => {
         setStations((prevStations) => [...prevStations, newStation]);
     };
 
-    // Render the HomeScreen content
     return (
         <View style={styles.container}>
+
             <StationListView stations={stations}/>
             <Button title="Add Station" onPress={() => {
                 console.log("Opening modal...");
@@ -50,7 +49,7 @@ const HomeScreen: React.FC = () => {
             <Modal
                 visible={modalVisible}
                 animationType="slide"
-                transparent={false} // Full-screen modal without transparency
+                transparent={false}
                 onRequestClose={() => setModalVisible(false)}
             >
                 <AddStationFormView
@@ -60,23 +59,6 @@ const HomeScreen: React.FC = () => {
 
             </Modal>
 
-            {/*<Modal
-                visible={modalVisible}
-                animationType="none"
-                onRequestClose={() => {
-                    console.log("Closing modal...");
-                    setModalVisible(false);
-                }}
-            >
-            <AddStationFormView
-                visible={modalVisible}
-                onClose={() => {
-                    console.log("Closing modal from AddStationFormView");
-                    setModalVisible(false);
-                }}
-                onSave={handleAddStation}
-            />
-            </Modal>*/}
         </View>
     );
 };
@@ -95,7 +77,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'white', // Ensure the modal has a white background
+        backgroundColor: 'white',
     },
     modalText: {
         fontSize: 18,

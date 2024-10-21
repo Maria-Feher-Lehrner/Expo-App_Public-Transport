@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, TextInput, Text, Button, StyleSheet } from 'react-native';
 import * as Location from 'expo-location';
-import { Station } from '@/components/download/stationService';
 
 interface AddStationFormViewProps {
     onClose: () => void;
@@ -44,53 +43,6 @@ const AddStationFormView: React.FC<AddStationFormViewProps> = ({ onClose, onSave
     };
 
 
-/*
-    // Function to get the current location
-    const getCurrentLocation = async () => {
-        try {
-            // Request permission to access location
-            const { status } = await Location.requestForegroundPermissionsAsync();
-            if (status === 'granted') {
-                // Get the current location
-                const location = await Location.getCurrentPositionAsync({});
-                const { latitude, longitude } = location.coords;
-
-                // Set the latitude and longitude state with the current location
-                setLatitude(latitude.toString());
-                setLongitude(longitude.toString());
-            } else {
-                console.log('Location permission not granted');
-            }
-        } catch (error) {
-            console.error('Error fetching location', error);
-        }
-    };
-
-    // Use effect to fetch location when modal opens
-    useEffect(() => {
-        if (visible) {
-            getCurrentLocation();
-        }
-    }, [visible]);
-
-    const handleAddStation = () => {
-        const newStation: Station = {
-            station_id: generateStationId(),
-            station_name: stationName,
-            latitude,
-            longitude,
-        };
-
-        // Pass the new station to the parent via the onSave prop
-        onSave(newStation);
-        onClose(); // Close the modal after adding the station
-
-        // Reset input fields
-        setStationName('');
-        setLatitude('');
-        setLongitude('');
-    };*/
-
     return (
 
 
@@ -108,14 +60,14 @@ const AddStationFormView: React.FC<AddStationFormViewProps> = ({ onClose, onSave
                     value={latitude}
                     onChangeText={setLatitude}
                     style={styles.input}
-                    keyboardType="numeric" // Ensures that the user can enter numeric values only
+                    keyboardType="numeric"
                 />
                 <Text style={styles.label}>Longitude</Text>
                 <TextInput
                     value={longitude}
                     onChangeText={setLongitude}
                     style={styles.input}
-                    keyboardType="numeric" // Ensures that the user can enter numeric values only
+                    keyboardType="numeric"
                 />
 
                 <View style={styles.buttonContainer}>
